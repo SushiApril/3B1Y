@@ -1,6 +1,8 @@
 #import os
 #import time
 from spot_controller import SpotController
+from bosdyn.client.robot_command import RobotCommandBuilder
+
 #import math
 # import cv2
 
@@ -10,20 +12,25 @@ SPOT_PASSWORD = "2zqa8dgw7lor"#os.environ['SPOT_PASSWORD']
 
 def degrees_to_radians(angle_degrees):
     """Convert degrees to radians without using the math module."""
-    pi = 3.14159265358979323846  # Approximate value of pi
+    pi = 3.14159265358979323846264338  # Approximate value of pi
     return angle_degrees * (pi / 180.0)
 
 
 
-def turn_spot_left(spot, angle_degrees):
-    """Turn Spot left by the specified angle in degrees."""
-    angle_radians = -degrees_to_radians(angle_degrees)  # Negative for left turn
+def turn_spot(spot, angle_degrees):
+    """
+    Turn Spot by the specified angle in degrees.
+    
+    Positive angle turns right (clockwise), negative angle turns left (counterclockwise).
+    """
+    angle_radians = degrees_to_radians(angle_degrees)
     rotate_command = RobotCommandBuilder.synchro_se2_trajectory_point_command(
         goal_x=0.0,
         goal_y=0.0,
-        goal_heading=angle_radians,
+        goal_heading=angle_radians,  # Positive is Right, Negative is Left
         frame_name='body'
     )
+
     spot.command_client.robot_command(rotate_command)
 
 # def capture_image():
@@ -95,9 +102,9 @@ def run():
             elif x == "s":
                 spot.move_by_velocity_control(v_x=-0.5, v_y=-0, v_rot=0, cmd_duration=3)
             elif x == "a":
-               turn_spot_left(spot, 90)
+                turn_spot(spot, -90)
             elif x == "d":
-                 turn_spot_left(spot, -90)
+                turn_spot(spot, 90)
 
 
 if __name__ == '__main__':
