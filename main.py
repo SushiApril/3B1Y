@@ -16,23 +16,6 @@ def degrees_to_radians(angle_degrees):
     return angle_degrees * (pi / 180.0)
 
 
-
-def turn_spot(spot, angle_degrees):
-    """
-    Turn Spot by the specified angle in degrees.
-    
-    Positive angle turns right (clockwise), negative angle turns left (counterclockwise).
-    """
-    angle_radians = degrees_to_radians(angle_degrees)
-    rotate_command = RobotCommandBuilder.synchro_se2_trajectory_point_command(
-        goal_x=0.0,
-        goal_y=0.0,
-        goal_heading=angle_radians,  # Positive is Right, Negative is Left
-        frame_name='body'
-    )
-
-    spot.command_client.robot_command(rotate_command)
-
 # def capture_image():
 #     camera_capture = cv2.VideoCapture(0)
 #     rv, image = camera_capture.read()
@@ -76,6 +59,30 @@ def turn_spot(spot, angle_degrees):
 #         capture_image()
 #         time.sleep(3)
 
+def velocity_cmd_helper(spot, desc='', v_x=0.0, v_y=0.0, v_rot=0.0):
+    """Helper to send velocity commands to Spot."""
+    spot._start_robot_command(
+        desc, RobotCommandBuilder.synchro_velocity_command(v_x=v_x, v_y=v_y, v_rot=v_rot))
+
+# Movement methods
+def move_forward(spot):
+    velocity_cmd_helper(spot, 'move_forward', v_x=0.5)
+
+def move_backward(spot):
+    velocity_cmd_helper(spot, 'move_backward', v_x=-0.5)
+
+def strafe_left(spot):
+    velocity_cmd_helper(spot, 'strafe_left', v_y=0.5)
+
+def strafe_right(spot):
+    velocity_cmd_helper(spot, 'strafe_right', v_y=-0.5)
+
+def turn_left(spot):
+    velocity_cmd_helper(spot, 'turn_left', v_rot=0.8)
+
+def turn_right(spot):
+    velocity_cmd_helper(spot, 'turn_right', v_rot=-0.8)
+
 def run():
 
     flag = False
@@ -83,7 +90,7 @@ def run():
     while True:
         x = input("What do you want the dog to do? :" )
         with SpotController(username=SPOT_USERNAME, password=SPOT_PASSWORD, robot_ip=ROBOT_IP) as spot:
-            #time.sleep(2)
+#         time.sleep(2)
 #         capture_image()
 #         # Move head to specified positions with intermediate time.sleep
             if not flag:
@@ -96,15 +103,18 @@ def run():
 
             if x == "q":
                 break
-                
             elif x == "w":
-                spot.move_to_goal(goal_x=0.5, goal_y=0)
+                move_forward(spot)
             elif x == "s":
-                spot.move_by_velocity_control(v_x=-0.5, v_y=-0, v_rot=0, cmd_duration=3)
-            elif x == "a":
-                turn_spot(spot, -90)
+                move_backward(spot)
+            elif x == "q":
+                turn_left(spot)
+            elif x == "e":
+                turn_right(spot)
             elif x == "d":
-                turn_spot(spot, 90)
+                strafe_right(spot)
+            elif x == "a":
+                strafe_left(spot)
 
 
 if __name__ == '__main__':
