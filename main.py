@@ -51,6 +51,28 @@ def main():
         capture_image()
         time.sleep(3)
 
+def run():
+
+
+    while True:
+        x = input(eval("What do you want the dog to do? :" ))
+        with SpotController(username=SPOT_USERNAME, password=SPOT_PASSWORD, robot_ip=ROBOT_IP) as spot:
+            time.sleep(2)
+            # Move head to specified positions with intermediate time.sleep
+
+            if x == "q":
+                break
+                
+            elif x == "w":
+                spot.move_to_goal(goal_x=0.5, goal_y=0)
+            elif x == "s":
+                spot.move_by_velocity_control(v_x=-0.5, v_y=-0, v_rot=0, cmd_duration=3)
+            elif x == "a":
+                spot.move_to_goal(goal_x=0.0, goal_y=0.5)
+            elif x == "d":
+                spot.move_to_goal(goal_x=0.0, goal_y=-0.5)
+
 
 if __name__ == '__main__':
-    main()
+    run()
+
