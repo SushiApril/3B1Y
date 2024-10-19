@@ -7,6 +7,16 @@ ROBOT_IP = "192.168.80.3"#os.environ['ROBOT_IP']
 SPOT_USERNAME = "admin"#os.environ['SPOT_USERNAME']
 SPOT_PASSWORD = "2zqa8dgw7lor"#os.environ['SPOT_PASSWORD']
 
+def turn_spot_left(spot, angle_degrees):
+    """Turn Spot left by the specified angle in degrees."""
+    angle_radians = -math.radians(angle_degrees)  # Negative for left turn
+    rotate_command = RobotCommandBuilder.synchro_se2_trajectory_point_command(
+        goal_x=0.0,
+        goal_y=0.0,
+        goal_heading=angle_radians,
+        frame_name='body'
+    )
+    spot.command_client.robot_command(rotate_command)
 
 # def capture_image():
 #     camera_capture = cv2.VideoCapture(0)
@@ -77,9 +87,9 @@ def run():
             elif x == "s":
                 spot.move_by_velocity_control(v_x=-0.5, v_y=-0, v_rot=0, cmd_duration=3)
             elif x == "a":
-                spot.move_to_goal(goal_x=0.0, goal_y=0.5)
+               turn_spot_left(spot, 90)
             elif x == "d":
-                spot.move_to_goal(goal_x=0.0, goal_y=-0.5)
+                 turn_spot_left(spot, -90)
 
 
 if __name__ == '__main__':
