@@ -61,10 +61,10 @@ def run():
             #time.sleep(2)
 #         capture_image()
 #         # Move head to specified positions with intermediate time.sleep
-            if not Flag:
+            if not flag:
                 spot.move_head_in_points(yaws=[0.2, 0], pitches=[0.3, 0],  rolls=[0.4, 0],sleep_after_point_reached=1)
 #         capture_image()
-            Flag = True
+            flag = True
 #         time.sleep(3)
             #time.sleep(2)
             # Move head to specified positions with intermediate time.sleep
