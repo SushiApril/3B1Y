@@ -2,6 +2,7 @@
 #import time
 from spot_controller import SpotController
 from bosdyn.client.robot_command import RobotCommandBuilder
+import time
 
 #import math
 # import cv2
@@ -59,29 +60,28 @@ def degrees_to_radians(angle_degrees):
 #         capture_image()
 #         time.sleep(3)
 
-def velocity_cmd_helper(spot, desc='', v_x=0.0, v_y=0.0, v_rot=0.0):
+def velocity_cmd_helper(spot, v_x=0.0, v_y=0.0, v_rot=0.0):
     """Helper to send velocity commands to Spot."""
-    spot._start_robot_command(
-        desc, RobotCommandBuilder.synchro_velocity_command(v_x=v_x, v_y=v_y, v_rot=v_rot))
+    spot._start_robot_command(RobotCommandBuilder.synchro_velocity_command(v_x=v_x, v_y=v_y, v_rot=v_rot), end_time_secs=time.time() + 20)
 
 # Movement methods
 def move_forward(spot):
-    velocity_cmd_helper(spot, 'move_forward', v_x=0.5)
+    velocity_cmd_helper(spot, v_x=0.5)
 
 def move_backward(spot):
-    velocity_cmd_helper(spot, 'move_backward', v_x=-0.5)
+    velocity_cmd_helper(spot, v_x=-0.5)
 
 def strafe_left(spot):
-    velocity_cmd_helper(spot, 'strafe_left', v_y=0.5)
+    velocity_cmd_helper(spot, v_y=0.5)
 
 def strafe_right(spot):
-    velocity_cmd_helper(spot, 'strafe_right', v_y=-0.5)
+    velocity_cmd_helper(spot, v_y=-0.5)
 
 def turn_left(spot):
-    velocity_cmd_helper(spot, 'turn_left', v_rot=0.8)
+    velocity_cmd_helper(spot, v_rot=0.8)
 
 def turn_right(spot):
-    velocity_cmd_helper(spot, 'turn_right', v_rot=-0.8)
+    velocity_cmd_helper(spot, v_rot=-0.8)
 
 def run():
 
