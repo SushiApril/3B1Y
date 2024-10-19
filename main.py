@@ -1,56 +1,122 @@
-import os
-import time
+#import os
+#import time
 from spot_controller import SpotController
-import cv2
+from bosdyn.client.robot_command import RobotCommandBuilder
+
+#import math
+# import cv2
 
 ROBOT_IP = "192.168.80.3"#os.environ['ROBOT_IP']
 SPOT_USERNAME = "admin"#os.environ['SPOT_USERNAME']
 SPOT_PASSWORD = "2zqa8dgw7lor"#os.environ['SPOT_PASSWORD']
 
-
-def capture_image():
-    camera_capture = cv2.VideoCapture(0)
-    rv, image = camera_capture.read()
-    print(f"Image Dimensions: {image.shape}")
-    camera_capture.release()
+def degrees_to_radians(angle_degrees):
+    """Convert degrees to radians without using the math module."""
+    pi = 3.14159265358979323846264338  # Approximate value of pi
+    return angle_degrees * (pi / 180.0)
 
 
-def main():
-    #example of using micro and speakers
-    print("Start recording audio")
-    sample_name = "aaaa.wav"
-    cmd = f'arecord -vv --format=cd --device={os.environ["AUDIO_INPUT_DEVICE"]} -r 48000 --duration=10 -c 1 {sample_name}'
-    print(cmd)
-    os.system(cmd)
-    print("Playing sound")
-    os.system(f"ffplay -nodisp -autoexit -loglevel quiet {sample_name}")
+# def capture_image():
+#     camera_capture = cv2.VideoCapture(0)
+#     rv, image = camera_capture.read()
+#     print(f"Image Dimensions: {image.shape}")
+#     camera_capture.release()
 
-    # # Capture image
 
-    # Use wrapper in context manager to lease control, turn on E-Stop, power on the robot and stand up at start
-    # and to return lease + sit down at the end
-    with SpotController(username=SPOT_USERNAME, password=SPOT_PASSWORD, robot_ip=ROBOT_IP) as spot:
+# def main():
+#     #example of using micro and speakers
+#     print("Start recording audio")
+#     sample_name = "aaaa.wav"
+#     cmd = f'arecord -vv --format=cd --device={os.environ["AUDIO_INPUT_DEVICE"]} -r 48000 --duration=10 -c 1 {sample_name}'
+#     print(cmd)
+#     os.system(cmd)
+#     print("Playing sound")
+#     os.system(f"ffplay -nodisp -autoexit -loglevel quiet {sample_name}")
 
-        time.sleep(2)
-        capture_image()
-        # Move head to specified positions with intermediate time.sleep
-        spot.move_head_in_points(yaws=[0.2, 0],
-                                 pitches=[0.3, 0],
-                                 rolls=[0.4, 0],
-                                 sleep_after_point_reached=1)
-        capture_image()
-        time.sleep(3)
+#     # # Capture image
 
-        # Make Spot to move by goal_x meters forward and goal_y meters left
-        spot.move_to_goal(goal_x=0.7, goal_y=0.25)
-        time.sleep(3)
-        capture_image()
+#     # Use wrapper in context manager to lease control, turn on E-Stop, power on the robot and stand up at start
+#     # and to return lease + sit down at the end
+#     with SpotController(username=SPOT_USERNAME, password=SPOT_PASSWORD, robot_ip=ROBOT_IP) as spot:
 
-        # Control Spot by velocity in m/s (or in rad/s for rotation)
-        spot.move_by_velocity_control(v_x=-0.3, v_y=0, v_rot=0, cmd_duration=2)
-        capture_image()
-        time.sleep(3)
+#         time.sleep(2)
+#         capture_image()
+#         # Move head to specified positions with intermediate time.sleep
+#         spot.move_head_in_points(yaws=[0.2, 0],
+#                                  pitches=[0.3, 0],
+#                                  rolls=[0.4, 0],
+#                                  sleep_after_point_reached=1)
+#         capture_image()
+#         time.sleep(3)
+
+#         # Make Spot to move by goal_x meters forward and goal_y meters left
+#         spot.move_to_goal(goal_x=1.0, goal_y=0.5)
+#         time.sleep(3)
+#         capture_image()
+
+#         # Control Spot by velocity in m/s (or in rad/s for rotation)
+#         spot.move_by_velocity_control(v_x=-0.5, v_y=-0.3, v_rot=0, cmd_duration=3)
+#         capture_image()
+#         time.sleep(3)
+
+def velocity_cmd_helper(spot, desc='', v_x=0.0, v_y=0.0, v_rot=0.0):
+    """Helper to send velocity commands to Spot."""
+    spot._start_robot_command(
+        desc, RobotCommandBuilder.synchro_velocity_command(v_x=v_x, v_y=v_y, v_rot=v_rot))
+
+# Movement methods
+def move_forward(spot):
+    velocity_cmd_helper(spot, 'move_forward', v_x=0.5)
+
+def move_backward(spot):
+    velocity_cmd_helper(spot, 'move_backward', v_x=-0.5)
+
+def strafe_left(spot):
+    velocity_cmd_helper(spot, 'strafe_left', v_y=0.5)
+
+def strafe_right(spot):
+    velocity_cmd_helper(spot, 'strafe_right', v_y=-0.5)
+
+def turn_left(spot):
+    velocity_cmd_helper(spot, 'turn_left', v_rot=0.8)
+
+def turn_right(spot):
+    velocity_cmd_helper(spot, 'turn_right', v_rot=-0.8)
+
+def run():
+
+    flag = False
+
+    while True:
+        x = input("What do you want the dog to do? :" )
+        with SpotController(username=SPOT_USERNAME, password=SPOT_PASSWORD, robot_ip=ROBOT_IP) as spot:
+#         time.sleep(2)
+#         capture_image()
+#         # Move head to specified positions with intermediate time.sleep
+            if not flag:
+                spot.move_head_in_points(yaws=[0.2, 0], pitches=[0.3, 0],  rolls=[0.4, 0],sleep_after_point_reached=1)
+#         capture_image()
+            flag = True
+#         time.sleep(3)
+            #time.sleep(2)
+            # Move head to specified positions with intermediate time.sleep
+
+            if x == "q":
+                break
+            elif x == "w":
+                move_forward(spot)
+            elif x == "s":
+                move_backward(spot)
+            elif x == "q":
+                turn_left(spot)
+            elif x == "e":
+                turn_right(spot)
+            elif x == "d":
+                strafe_right(spot)
+            elif x == "a":
+                strafe_left(spot)
 
 
 if __name__ == '__main__':
-    main()
+    run()
+
