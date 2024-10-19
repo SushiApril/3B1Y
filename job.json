@@ -1,5 +1,5 @@
 {
-    "image": "anshdholakia/spot-robot-images:latest",
+    "image": "ghcr.io/sushiapril/3b1y:main",
     "container_name": "",
     "ports": [],
     "network_mode": "host",
