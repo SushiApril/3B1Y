@@ -53,10 +53,19 @@ SPOT_PASSWORD = "2zqa8dgw7lor"#os.environ['SPOT_PASSWORD']
 
 def run():
 
+    flag = False
 
     while True:
         x = eval(input("What do you want the dog to do? :" ))
         with SpotController(username=SPOT_USERNAME, password=SPOT_PASSWORD, robot_ip=ROBOT_IP) as spot:
+            time.sleep(2)
+#         capture_image()
+#         # Move head to specified positions with intermediate time.sleep
+            if not Flag:
+                spot.move_head_in_points(yaws=[0.2, 0], pitches=[0.3, 0],  rolls=[0.4, 0],sleep_after_point_reached=1)
+#         capture_image()
+            Flag = True
+#         time.sleep(3)
             time.sleep(2)
             # Move head to specified positions with intermediate time.sleep
 
