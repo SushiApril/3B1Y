@@ -1,16 +1,23 @@
 #import os
 #import time
 from spot_controller import SpotController
-import math
+#import math
 # import cv2
 
 ROBOT_IP = "192.168.80.3"#os.environ['ROBOT_IP']
 SPOT_USERNAME = "admin"#os.environ['SPOT_USERNAME']
 SPOT_PASSWORD = "2zqa8dgw7lor"#os.environ['SPOT_PASSWORD']
 
+def degrees_to_radians(angle_degrees):
+    """Convert degrees to radians without using the math module."""
+    pi = 3.14159265358979323846  # Approximate value of pi
+    return angle_degrees * (pi / 180.0)
+
+
+
 def turn_spot_left(spot, angle_degrees):
     """Turn Spot left by the specified angle in degrees."""
-    angle_radians = -math.radians(angle_degrees)  # Negative for left turn
+    angle_radians = -degrees_to_radians(angle_degrees)  # Negative for left turn
     rotate_command = RobotCommandBuilder.synchro_se2_trajectory_point_command(
         goal_x=0.0,
         goal_y=0.0,
