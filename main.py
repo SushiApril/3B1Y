@@ -42,7 +42,7 @@ def main():
         time.sleep(3)
 
         # Make Spot to move by goal_x meters forward and goal_y meters left
-        spot.move_to_goal(goal_x=0.5, goal_y=0)
+        spot.move_to_goal(goal_x=0.7, goal_y=0.25)
         time.sleep(3)
         capture_image()
 
