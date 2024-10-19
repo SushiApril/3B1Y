@@ -58,7 +58,7 @@ def run():
     while True:
         x = input("What do you want the dog to do? :" )
         with SpotController(username=SPOT_USERNAME, password=SPOT_PASSWORD, robot_ip=ROBOT_IP) as spot:
-            time.sleep(2)
+            #time.sleep(2)
 #         capture_image()
 #         # Move head to specified positions with intermediate time.sleep
             if not Flag:
@@ -66,7 +66,7 @@ def run():
 #         capture_image()
             Flag = True
 #         time.sleep(3)
-            time.sleep(2)
+            #time.sleep(2)
             # Move head to specified positions with intermediate time.sleep
 
             if x == "q":
