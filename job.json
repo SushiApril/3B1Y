@@ -1,5 +1,5 @@
 {
-    "image": "ghcr.io/otaberu/hackathon-spot-image:main",
+    "image": "anshdholakia/spot-robot-images:latest",
     "container_name": "",
     "ports": [],
     "network_mode": "host",
