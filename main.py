@@ -52,7 +52,7 @@ def main():
         # time.sleep(3)
 
         # Go back to the initial position
-        spot.move_to_goal(goal_x=0, goal_y=0)
+        spot.move_to_goal(goal_x=-1, goal_y=-0.5)
         time.sleep(3)
         capture_image()
 
