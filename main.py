@@ -101,19 +101,19 @@ def run():
             #time.sleep(2)
             # Move head to specified positions with intermediate time.sleep
 
-            if x == "q":
+            if x == "quit":
                 break
             elif x == "w":
                 move_forward(spot)
             elif x == "s":
                 move_backward(spot)
-            elif x == "q":
-                turn_left(spot)
-            elif x == "e":
-                turn_right(spot)
-            elif x == "d":
-                strafe_right(spot)
             elif x == "a":
+                turn_left(spot)
+            elif x == "d":
+                turn_right(spot)
+            elif x == "q":
+                strafe_right(spot)
+            elif x == "e":
                 strafe_left(spot)
 
 
