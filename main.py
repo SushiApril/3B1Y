@@ -66,10 +66,10 @@ def velocity_cmd_helper(spot, v_x=0.0, v_y=0.0, v_rot=0.0):
 
 # Movement methods
 def move_forward(spot):
-    velocity_cmd_helper(spot, v_x=0.5)
+    spot.move_to_goal(goal_x=0.5, goal_y=0.0)
 
 def move_backward(spot):
-    velocity_cmd_helper(spot, v_x=-0.5)
+    spot.move_to_goal(goal_x=-0.5, goal_y=0.0)
 
 def strafe_left(spot):
     velocity_cmd_helper(spot, v_y=0.5)
