@@ -72,10 +72,10 @@ def move_backward(spot):
     spot.move_to_goal(goal_x=-0.5, goal_y=0.0)
 
 def turn_left(spot):
-    spot.move_by_velocity_control(v_x=-0.5, v_y=0.5, v_rot=0, cmd_duration=3)
+    spot.move_by_velocity_control(v_x=-0.5, v_y=0.5, v_rot=45, cmd_duration=3)
 
 def turn_right(spot):
-    spot.move_by_velocity_control(v_x=-0.5, v_y=-0.5, v_rot=0, cmd_duration=3)
+    spot.move_by_velocity_control(v_x=-0.5, v_y=-0.5, v_rot=90, cmd_duration=3)
 
 def strafe_left(spot):
     velocity_cmd_helper(spot, v_y=0.5)
@@ -89,7 +89,7 @@ def run():
 
     flag = False
 
-    while True:
+    for i in range(5):
         x = input("What do you want the dog to do? :" )
         with SpotController(username=SPOT_USERNAME, password=SPOT_PASSWORD, robot_ip=ROBOT_IP) as spot:
 #         time.sleep(2)
@@ -113,10 +113,8 @@ def run():
                 turn_left(spot)
             elif x == "d":
                 turn_right(spot)
-            elif x == "q":
-                strafe_right(spot)
-            elif x == "e":
-                strafe_left(spot)
+            else:
+                print("bruh wrong command")
 
 
 if __name__ == '__main__':
