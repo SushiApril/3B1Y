@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Spot Robot Control</title>
+        <style>
+            body {
+                font-family: Arial, sans-serif;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                height: 100vh;
+                margin: 0;
+                background-color: #1c1e1f;
+            }
+            .container {
+                text-align: center;
+                background-color: rgb(64, 64, 64);
+                padding: 20px;
+                border-radius: 10px;
+                box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            }
+            button {
+                margin: 5px;
+                padding: 10px 20px;
+                font-size: 16px;
+                cursor: pointer;
+            }
+            #battery-status {
+                margin-top: 20px;
+                font-weight: bold;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="container">
+            <h1>Spot Robot Control</h1>
+            <div>
+                <button onclick="sendCommand('move/forward')">Forward</button>
+                <button onclick="sendCommand('move/backward')">Backward</button>
+            </div>
+            <div>
+                <button onclick="sendCommand('move/left')">Left</button>
+                <button onclick="sendCommand('move/right')">Right</button>
+            </div>
+            <div>
+                <button onclick="sendCommand('turn/left')">Turn Left</button>
+                <button onclick="sendCommand('turn/right')">Turn Right</button>
+            </div>
+            <div>
+                <button onclick="sendCommand('sit')">Sit</button>
+                <button onclick="sendCommand('stand')">Stand</button>
+            </div>
+            <div>
+                <button onclick="sendCommand('battery-change')">
+                    Battery Change
+                </button>
+                <button onclick="sendCommand('self-right')">Self Right</button>
+            </div>
+            <div>
+                <button onclick="getBatteryStatus()">Get Battery Status</button>
+            </div>
+            <div>
+                <button onclick="sendCommand('test')">test</button>
+            </div>
+            <div id="battery-status"></div>
+        </div>
+
+        <script>
+            function sendCommand(endpoint) {
+                fetch(`http://localhost:5000/${endpoint}`, {
+                    method: "GET",
+                })
+                    .then((response) => response.json())
+                    .then((data) => {
+                        console.log(data);
+                        alert(data.status);
+                    })
+                    .catch((error) => {
+                        console.error("Error:", error);
+                        alert("Error: " + error);
+                    });
+            }
+
+            function getBatteryStatus() {
+                fetch("http://localhost:5000/battery", {
+                    method: "GET",
+                })
+                    .then((response) => response.json())
+                    .then((data) => {
+                        console.log(data);
+                        document.getElementById("battery-status").innerText =
+                            data;
+                    })
+                    .catch((error) => {
+                        console.error("Error:", error);
+                        alert("Error: " + error);
+                    });
+            }
+        </script>
+    </body>
+</html>

@@ -125,5 +125,10 @@ def shutdown():
     wasd_interface.shutdown()
     return jsonify(status="Shutdown complete")
 
+@app.route('/test', methods=['GET'])
+def test():
+    print("The /test endpoint was called")
+    return jsonify(status="Test")
+
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000)
