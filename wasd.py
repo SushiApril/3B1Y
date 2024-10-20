@@ -221,8 +221,10 @@ class WasdInterface(object):
             ord('O'): self._image_task.toggle_video_mode,
             ord('u'): self._unstow,
             ord('j'): self._stow,
-            ord('l'): self._toggle_lease
+            ord('l'): self._toggle_lease,
+            ord('h'): self._play_sound
         }
+
         self._locked_messages = ['', '', '']  # string: displayed message for user
         self._estop_keepalive = None
         self._exit_check = None
