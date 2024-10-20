@@ -446,7 +446,7 @@ class WasdInterface(object):
         self._velocity_cmd_helper('turn_right', v_rot=-VELOCITY_BASE_ANGULAR)
 
     def _play_sound(self):
-        sample_name = "dog-bark-179915.mp3"
+        sample_name = "dog-bark.wav"
         os.system(f"ffplay -nodisp -autoexit -loglevel quiet {sample_name}")
 
     def _stop(self):
