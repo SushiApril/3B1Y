@@ -33,7 +33,7 @@ from bosdyn.client.image import ImageClient
 from bosdyn.client.lease import Error as LeaseBaseError
 from bosdyn.client.lease import LeaseClient, LeaseKeepAlive
 from bosdyn.client.power import PowerClient
-from bosdyn.client.robot_command import RobotCommandBuilder, RobotCommandClient, RobotCommandClient, blocking_command, blocking_stand, blocking_sit
+from bosdyn.client.robot_command import RobotCommandBuilder, RobotCommandClient, RobotCommandClient
 from bosdyn.client.robot_state import RobotStateClient
 from bosdyn.client.time_sync import TimeSyncError
 from bosdyn.util import duration_str, format_metric, secs_to_hms
