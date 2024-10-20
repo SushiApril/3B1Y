@@ -72,7 +72,7 @@ def move_backward(spot):
     spot.move_to_goal(goal_x=-0.5, goal_y=0.0)
 
 def turn_left(spot):
-    spot.move_by_velocity_control(v_x=-0.0, v_y=-1.0, v_rot=0, cmd_duration=3)
+    spot.move_by_velocity_control(v_x=-1.0, v_y=1.0, v_rot=0, cmd_duration=3)
 
 def turn_right(spot):
     spot.move_by_velocity_control(v_x=-1.0, v_y=-0.0, v_rot=0, cmd_duration=3)
