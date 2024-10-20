@@ -33,7 +33,7 @@ from bosdyn.client.image import ImageClient
 from bosdyn.client.lease import Error as LeaseBaseError
 from bosdyn.client.lease import LeaseClient, LeaseKeepAlive
 from bosdyn.client.power import PowerClient
-from bosdyn.client.robot_command import RobotCommandBuilder, RobotCommandClient, RobotCommandClient
+from bosdyn.client.robot_command import RobotCommandBuilder, RobotCommandClient
 from bosdyn.client.robot_state import RobotStateClient
 from bosdyn.client.time_sync import TimeSyncError
 from bosdyn.util import duration_str, format_metric, secs_to_hms
@@ -42,7 +42,7 @@ LOGGER = logging.getLogger()
 
 VELOCITY_BASE_SPEED = 0.5  # m/s
 VELOCITY_BASE_ANGULAR = 0.8  # rad/sec
-VELOCITY_CMD_DURATION = 1.6  # seconds
+VELOCITY_CMD_DURATION = 0.6  # seconds
 COMMAND_INPUT_RATE = 0.1
 
 
@@ -221,10 +221,8 @@ class WasdInterface(object):
             ord('O'): self._image_task.toggle_video_mode,
             ord('u'): self._unstow,
             ord('j'): self._stow,
-            ord('l'): self._toggle_lease,
-            ord('h'): self._play_sound
+            ord('l'): self._toggle_lease
         }
-
         self._locked_messages = ['', '', '']  # string: displayed message for user
         self._estop_keepalive = None
         self._exit_check = None
@@ -445,10 +443,6 @@ class WasdInterface(object):
     def _turn_right(self):
         self._velocity_cmd_helper('turn_right', v_rot=-VELOCITY_BASE_ANGULAR)
 
-    def _play_sound(self):
-        sample_name = "dog-bark.wav"
-        os.system(f"ffplay -nodisp -autoexit -loglevel quiet {sample_name}")
-
     def _stop(self):
         self._start_robot_command('stop', RobotCommandBuilder.stop_command())
 
@@ -640,119 +634,24 @@ def main():
         LOGGER.error('Failed to initialize robot communication: %s', err)
         return False
 
-    #LOGGER.removeHandler(stream_handler)  # Don't use stream handler in curses mode.
-
+    LOGGER.removeHandler(stream_handler)  # Don't use stream handler in curses mode.
 
     try:
-
-        print("robot state:\n")
-
-        print(wasd_interface._robot_state_task.proto)
-
-        # _robot_state_task.proto
-
-        print("estop state:")
-
-        print(wasd_interface._estop_str())
-
-        print("toggle estop")
-
-        wasd_interface._toggle_estop()
-
-        print("estop state:")
-
-        print(wasd_interface._estop_str())
-
-        robot.power_on(timeout_sec=20)
-
-        if robot.is_powered_on():
-
-            print("Powered On")
-
-            # If everything went smooth, Spot face lights should turn green
-
-        else:
-
-            # In case of some problems, e.g. somebody stole control over robot
-
-            print("Power on failed")
-
-
-
-        # idk if this works yet
-
-        robot.time_sync.wait_for_sync()
-
-        command_client = robot.ensure_client(RobotCommandClient.default_service_name)
-
-        blocking_stand(command_client, timeout_sec=10)
-
-
-
-        wasd_interface._move_forward()
-
-        time.sleep(2)
-
-
-
-        blocking_sit(command_client, timeout_sec=10)
-
-
-
-        # print("power state:")
-
-        # print(wasd_interface._power_state_str())
-
-        # print("toggle power:")
-
-        # wasd_interface._toggle_power()
-
-        # print("power state:")
-
-        # print(wasd_interface._power_state_str())
-
-        # print("robot state:\n")
-
-        # print(wasd_interface._robot_state_task.proto)
-
-        print("stand:")
-
-        wasd_interface._stand()
-
-        time.sleep(10)
-
-        # try:
-
-        # Prevent curses from introducing a 1 second delay for ESC key
-
-        # os.environ.setdefault('ESCDELAY', '0')
-        # Run wasd interface in curses mode, then restore terminal config.
-
-        # curses.wrapper(wasd_interface.drive)
-
-        # finally:
-
+        try:
+            # Prevent curses from introducing a 1-second delay for ESC key
+            os.environ.setdefault('ESCDELAY', '0')
+            # Run wasd interface in curses mode, then restore terminal config.
+            curses.wrapper(wasd_interface.drive)
+        finally:
             # Restore stream handler to show any exceptions or final messages.
-
-            # LOGGER.addHandler(stream_handler)
-
+            LOGGER.addHandler(stream_handler)
     except Exception as e:
-
-        print('WASD has thrown an error: [%r] %s', e, e)
-
+        LOGGER.error('WASD has thrown an error: [%r] %s', e, e)
     finally:
-
         # Do any final cleanup steps.
-
         wasd_interface.shutdown()
 
-
-
     return True
-
-
-
-
 
 
 if __name__ == '__main__':
