@@ -4,9 +4,11 @@ import bosdyn.client.util
 from bosdyn.client import ResponseError, RpcError, create_standard_sdk
 from bosdyn.client.robot_command import RobotCommandBuilder, RobotCommandClient, blocking_stand, blocking_sit
 from wasd import WasdInterface  # Assuming the original file is named 'wasd.py'
+from flask_cors import CORS
+
 
 app = Flask(__name__)
-
+CORS(app)
 HOSTNAME = "192.168.80.3"
 
 # Global variables to hold robot and interface objects
