@@ -62,7 +62,7 @@ def degrees_to_radians(angle_degrees):
 
 def velocity_cmd_helper(spot, v_x=0.0, v_y=0.0, v_rot=0.0):
     """Helper to send velocity commands to Spot."""
-    spot._start_robot_command(RobotCommandBuilder.synchro_velocity_command(v_x=v_x, v_y=v_y, v_rot=v_rot), end_time_secs=time.time() + 20)
+    spot._start_robot_command(RobotCommandBuilder.synchro_velocity_command(v_x=v_x, v_y=v_y, v_rot=v_rot), end_time_secs=time.time() + 3)
 
 # Movement methods
 def move_forward(spot):
