@@ -2,7 +2,7 @@ import atexit
 from flask import Flask, jsonify
 import bosdyn.client.util
 from bosdyn.client import ResponseError, RpcError, create_standard_sdk
-from bosdyn.client.robot_command import RobotCommandBuilder, RobotCommandClient
+from bosdyn.client.robot_command import RobotCommandBuilder, RobotCommandClient, blocking_stand, blocking_sit
 from wasd import WasdInterface  # Assuming the original file is named 'wasd.py'
 
 app = Flask(__name__)
